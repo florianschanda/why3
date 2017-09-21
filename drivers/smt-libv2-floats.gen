@@ -73,6 +73,12 @@ theory ieee_float.Float32
 
   syntax predicate t'isFinite "(fp.isFinite32 %1)"
 
+  (* Faithful translations of the axiomatisation, mainly to remove this crud
+     from the smtlib output of SPARK. *)
+  syntax function round "(fp.to_real ((_ to_fp 8 24) %1 %2))"
+  syntax predicate in_range "(<= (abs %1) (fp.to_real (fp #b0 #b11111110 #b11111111111111111111111)))"
+  syntax predicate no_overflow "(<= (abs (fp.to_real ((_ to_fp 8 24) %1 %2))) (fp.to_real (fp #b0 #b11111110 #b11111111111111111111111)))"
+
   remove allprops
 end
 
@@ -87,6 +93,12 @@ theory ieee_float.Float64
   prelude "(define-fun fp.isFinite64 ((x Float64)) Bool (not (or (fp.isInfinite x) (fp.isNaN x))))"
 
   syntax predicate t'isFinite "(fp.isFinite64 %1)"
+
+  (* Faithful translations of the axiomatisation, mainly to remove this crud
+     from the smtlib output of SPARK. *)
+  syntax function round "(fp.to_real ((_ to_fp 11 53) %1 %2))"
+  syntax predicate in_range "(<= (abs %1) (fp.to_real (fp #b0 #b11111111110 #b1111111111111111111111111111111111111111111111111111)))"
+  syntax predicate no_overflow "(<= (abs (fp.to_real ((_ to_fp 11 53) %1 %2))) (fp.to_real (fp #b0 #b11111111110 #b1111111111111111111111111111111111111111111111111111)))"
 
   remove allprops
 end
