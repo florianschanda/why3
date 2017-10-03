@@ -1,2 +1,20 @@
+transformation "eliminate_unused_hypo"
+
 import "cvc4_gnatprove.drv"
 import "smt-libv2-floats-int_via_real.gen"
+
+(* These leftover axioms are generally not used by normal people, they are
+   only needed if you use nth, etc. predicates. Here we remove them to
+   remove a further source of quantifiers.
+*)
+theory bv.BV_Gen
+   remove allprops
+   meta "ls:eliminate" function nth
+   meta "ls:eliminate" function nth_bv
+   meta "ls:eliminate" predicate eq_sub
+   meta "ls:eliminate" predicate eq_sub_bv
+   syntax function nth "(error)"
+   syntax function nth_bv "(error)"
+   syntax predicate eq_sub "(error)"
+   syntax predicate eq_sub_bv "(error)"
+end
